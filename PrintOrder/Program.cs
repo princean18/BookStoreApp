@@ -24,4 +24,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(name: "Dashboard",
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+
+
 app.Run();
+
+
