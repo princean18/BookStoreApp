@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using PrintOrder.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<PrintOrderContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PrintOrderContext") ?? throw new InvalidOperationException("Connection string 'PrintOrderContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,11 +27,14 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(name: "Dashboard",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
-
+app.MapControllerRoute(name: "Books",
+    pattern: "{controller=Books}/{action=index}/{id?}");
+app.MapControllerRoute(name: "addbooks",
+    pattern: "{controller=Books}/{action=index}/{id?}");
 
 app.Run();
 
