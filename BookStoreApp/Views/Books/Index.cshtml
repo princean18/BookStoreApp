@@ -28,30 +28,6 @@
                                     <th style="width:10%">Actions</th>
                                 </tr>
                             </thead>
-                            @*<tbody>
-                                <tr class="odd gradeX">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 4.0</td>
-                                    <td>Win 95+</td>
-                                    <td>4</td>
-                                    <td class="text-center">4</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-primary"><i class="fa fa-edit fa-fw"></i>  </button>
-                                        <button class="btn btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>
-                                    </td>
-                                </tr>
-                                <tr class="odd gradeX">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 4.0</td>
-                                    <td>Win 95+</td>
-                                    <td>4</td>
-                                    <td class="text-center">4</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-primary"><i class="fa fa-edit fa-fw"></i>  </button>
-                                        <button class="btn btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>
-                                    </td>
-                                </tr> 
-                            </tbody>*@
                         </table>
                     </div>
                 </div>
@@ -108,7 +84,7 @@
                 {
                     title: 'Action',
                     "render": function ( data, type, row ) {
-                        return '<button class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i>  </button> <button class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>';
+                        return '<button id="editBtn" onclick="onClickEdit('+row.id+')" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i>  </button> <button onclick="onClickDelete('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>';
                     },
                     "targets": 5
                 },
@@ -117,26 +93,31 @@
     });
 
 
-    // $(document).ready(function() {
-    //     $('#dataTableBooks').DataTable({
-    //             responsive: true,
-    //             "ajax": {
-    //                 "url": "/BooksModels/Details",
-    //             }
-    //     });
-    // });
+    function onClickEdit(id) {
+        window.location.href = "/books/editbooks/"+id;
+    }
+
+    function onClickDelete(val) {
+
+        var data ={
+            id: val
+        };
+
+        $.ajax({
+            url: "/books/deletebook",
+            type: "POST",
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data:  "id="+val,
+            success: function (result) {
+                console.log(result);
+                $('#dataTableBooks').DataTable().ajax.reload();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
 
 
-    //$('#dataTableBooks').dataTable().fnAddata(myData2);
-
-    // $.ajax({
-    //     type: "GET",
-    //          url: "/BooksModels/Details",
-    //         success: function (data) {
-    //         alert(data);
-    //     },
-    //     error: function (error) {
-    //         alert("error");
-    //     }
-    // });
 </script>

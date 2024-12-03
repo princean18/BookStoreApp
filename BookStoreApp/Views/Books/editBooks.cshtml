@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Add Books";
+    ViewData["Title"] = "Edit Book Details";
 }
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Add book</h1>
+            <h1 class="page-header">Edit Book Details</h1>
         </div>
     </div>
 
@@ -21,42 +21,43 @@
                             <form id="createBook">
                                 <div class="form-group">
                                     <label>Title</label>
-                                    <input class="form-control" placeholder="Enter book title" name="title" value="titles">
+                                    <input type="hidden" class="form-control" placeholder="Enter book title" name="id" value="@Model.Id">
+                                    <input class="form-control" placeholder="Enter book title" name="title" value="@Model.Title">
                                     @* <p class="help-block">Example block-level help text here.</p> *@
                                 </div>
 
                                 <div class="form-group">
                                     <label>Author</label>
-                                    <input class="form-control" placeholder="Enter author name" name="authorName" value="authrs">
+                                    <input class="form-control" placeholder="Enter author name" name="authorName" value="@Model.AuthorName">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Genre</label>
-                                    <input class="form-control" placeholder="Enter genre" name="genre" value="genre">
+                                    <input class="form-control" placeholder="Enter genre" name="genre" value="@Model.Genre">
                                 </div>
 
                                 <div class="form-group">
                                     <label>ISBN</label>
-                                    <input class="form-control" placeholder="Enter ISBN" name="isbn" value="ISDBBNN">
+                                    <input class="form-control" placeholder="Enter ISBN" name="isbn" value="@Model.ISBN">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Available copies</label>
-                                    <input type="number" min="0" class="form-control" name="availableCopies" placeholder="Enter the number of available copies" value="14">
+                                    <input type="number" min="0" class="form-control" name="availableCopies" placeholder="Enter the number of available copies" value="@Model.AvailableCopies">
                                 </div>
 
                                 @* <button type="submit" class="btn btn-primary">Submit</button> *@
                                 <a onclick="submitForm()" class="btn btn-primary">Submit</a>
                                 <br />
                                 <br />
-                                
+
                                 <div id="errorMsgDiv" class="alert alert-danger alert-dismissible">
                                     @* <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> *@
                                     <p id="errorMsg"></p>
                                 </div>
 
                             </form>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -71,11 +72,11 @@
 
     function submitForm() {
         $.ajax({
-            url: "/books/create",
+            url: "/books/updateBook",
             type: "POST",
             dataType: "json",
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data:  $('#createBook').serialize(),
+            data:  $('#createBook').serialize()+ "&id="+@Model.Id,
             success: function (result) {
                 console.log(result);
                 $("#errorMsgDiv").hide();
@@ -85,7 +86,7 @@
                 $("#errorMsgDiv").show();
                 $("#errorMsg").html( err.responseJSON.detail);
             }
-        }); 
+        });
     }
 
 </script>
