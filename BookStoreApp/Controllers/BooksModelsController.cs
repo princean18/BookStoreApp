@@ -44,7 +44,7 @@ namespace PrintOrder.Controllers
                 return NotFound();
             }
 
-            return booksModel;
+            return Json( booksModel);
         }
 
         // GET: BooksModels/Create

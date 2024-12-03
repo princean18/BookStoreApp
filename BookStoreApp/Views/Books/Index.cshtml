@@ -17,8 +17,8 @@
 
                 <div class="panel-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                            <thead>
+                        <table class="table table-striped table-bordered table-hover" id="dataTableBooks">
+                             <thead>
                                 <tr>
                                     <th style="width:20%">Title</th>
                                     <th style="width:20%">Auther</th>
@@ -28,7 +28,7 @@
                                     <th style="width:10%">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            @*<tbody>
                                 <tr class="odd gradeX">
                                     <td>Trident</td>
                                     <td>Internet Explorer 4.0</td>
@@ -50,8 +50,8 @@
                                         <button class="btn btn-primary"><i class="fa fa-edit fa-fw"></i>  </button>
                                         <button class="btn btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>
                                     </td>
-                                </tr>
-                            </tbody>
+                                </tr> 
+                            </tbody>*@
                         </table>
                     </div>
                 </div>
@@ -62,14 +62,81 @@
 </div>
 
 <script>
-    $.ajax({
-        type: "GET",
-             url: "/BooksModels/Details",
-            success: function (data) {
-            alert(data);
-        },
-        error: function (error) {
-            alert("error");
-        }
+
+    $(document).ready(function() {
+        $('#dataTableBooks').dataTable( {
+            dataType: 'json',
+            ajax: {
+                url: '/BooksModels/Details',
+                dataType: 'json',
+                contentType: "application/json",
+                dataSrc: function(res) {
+                    console.log(res);
+                    return res;
+                }
+            },
+            columns: [
+                { data: "title" },
+                { data: "authorName" },
+                { data: "genre" },
+                { data: "isbn" },
+                { data: "availableCopies" },
+                { title: "Action" }
+            ],
+            "columnDefs": [
+                {
+                    title: 'Title',
+                    field: 'title',
+                    "targets": 0
+                },
+                {
+                    title: 'Author',
+                    "targets": 1
+                },
+                {
+                    title: 'Genre',
+                    "targets": 2
+                },
+                {
+                    title: 'ISBN',
+                    "targets": 3
+                },
+                {
+                    title: 'Available Copies',
+                    "targets": 4
+                },
+                {
+                    title: 'Action',
+                    "render": function ( data, type, row ) {
+                        return '<button class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i>  </button> <button class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>';
+                    },
+                    "targets": 5
+                },
+            ]
+        });
     });
+
+
+    // $(document).ready(function() {
+    //     $('#dataTableBooks').DataTable({
+    //             responsive: true,
+    //             "ajax": {
+    //                 "url": "/BooksModels/Details",
+    //             }
+    //     });
+    // });
+
+
+    //$('#dataTableBooks').dataTable().fnAddata(myData2);
+
+    // $.ajax({
+    //     type: "GET",
+    //          url: "/BooksModels/Details",
+    //         success: function (data) {
+    //         alert(data);
+    //     },
+    //     error: function (error) {
+    //         alert("error");
+    //     }
+    // });
 </script>

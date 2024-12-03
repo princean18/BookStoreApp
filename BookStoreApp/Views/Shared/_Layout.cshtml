@@ -35,6 +35,20 @@
 
     <script src="~/js/jquery.min.js"></script>
 
+    <script>
+        async function dataService(url) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) {
+                    throw new Error('Network response error');
+                }
+            return res.json();
+            } catch (err) {
+                console.error('Fetch error:', error);
+            }
+        }
+    </script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -238,11 +252,11 @@
 
 
     <script>
-        $(document).ready(function() {
-            $('#dataTables-example').DataTable({
-                    responsive: true
-            });
-        });
+        // $(document).ready(function() {
+        //     $('#dataTables-example').DataTable({
+        //             responsive: true
+        //     });
+        // });
     </script>
 
 
