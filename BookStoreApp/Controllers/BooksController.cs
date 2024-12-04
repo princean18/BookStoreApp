@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PrintOrder.Data;
-using PrintOrder.Models;
+using BookStoreApp.Data;
+using BookStoreApp.Models;
 
-namespace PrintOrder.Controllers
+namespace BookStoreApp.Controllers
 {
     public class BooksController : Controller
     {
 
-        private readonly PrintOrderContext _context;
+        private readonly BookStoreAppContext _context;
 
-        public BooksController(PrintOrderContext context)
+        public BooksController(BookStoreAppContext context)
         {
             _context = context;
         }
@@ -22,6 +22,20 @@ namespace PrintOrder.Controllers
         public IActionResult AddBooks()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Books>>> Details()
+
+        {
+
+            var booksModel = await _context.Books.ToListAsync();
+            if (booksModel == null)
+            {
+                return NotFound();
+            }
+
+            return Json(booksModel);
         }
 
         [HttpPost]
@@ -100,7 +114,7 @@ namespace PrintOrder.Controllers
         {
             if (_context.Books == null)
             {
-                return Problem("Entity set 'PrintOrderContext.BooksModel'  is null.");
+                return Problem("Entity set 'BookStoreAppContext.BooksModel'  is null.");
             }
             var booksModel = await _context.Books.FindAsync(id);
             if (booksModel != null)

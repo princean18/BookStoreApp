@@ -1,4 +1,4 @@
-namespace PrintOrder.Models
+namespace BookStoreApp.Models
 {
     public class ErrorViewModel
     {

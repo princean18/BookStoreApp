@@ -39,11 +39,48 @@
 
 <script>
 
+    function onClickDeleteConfirm(val) {
+        //event.preventDefault(); // prevent form submit
+        //var form = event.target.form; // storing the form
+        swal.fire({
+            title: "Are you sure?",
+            text: "Data will be deleted.",
+            showCancelButton: true,
+            confirmButtonColor: "#D22B2B",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel please!",
+        }).then((result) => {
+            if (result.value) {
+                onClickDelete(val);
+            }
+        });
+    }
+
+    function onClickDelete(val) {
+
+        $.ajax({
+            url: "/books/deletebook",
+            type: "POST",
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data:  "id="+val,
+            success: function (result) {
+                console.log(result);
+                swal.fire("Deleted!", "Data has been deleted.", "success");
+                $('#dataTableBooks').DataTable().ajax.reload();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
     $(document).ready(function() {
+
         $('#dataTableBooks').dataTable( {
             dataType: 'json',
             ajax: {
-                url: '/BooksModels/Details',
+                url: '/books/details',
                 dataType: 'json',
                 contentType: "application/json",
                 dataSrc: function(res) {
@@ -84,7 +121,7 @@
                 {
                     title: 'Action',
                     "render": function ( data, type, row ) {
-                        return '<button id="editBtn" onclick="onClickEdit('+row.id+')" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i>  </button> <button onclick="onClickDelete('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i>  </button>';
+                        return '<button id="editBtn" onclick="onClickEdit('+row.id+')" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Edit </button> <button onclick="onClickDeleteConfirm('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i> Delete </button>';
                     },
                     "targets": 5
                 },
@@ -97,27 +134,7 @@
         window.location.href = "/books/editbooks/"+id;
     }
 
-    function onClickDelete(val) {
-
-        var data ={
-            id: val
-        };
-
-        $.ajax({
-            url: "/books/deletebook",
-            type: "POST",
-            dataType: "json",
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data:  "id="+val,
-            success: function (result) {
-                console.log(result);
-                $('#dataTableBooks').DataTable().ajax.reload();
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
-    }
+    
 
 
 </script>

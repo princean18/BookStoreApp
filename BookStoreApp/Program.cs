@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BookStoreApp.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PrintOrder.Data;
+using BookStoreApp.Data;
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<PrintOrderContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PrintOrderContext") ?? throw new InvalidOperationException("Connection string 'PrintOrderContext' not found.")));
+builder.Services.AddDbContext<BookStoreAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreAppContext") ?? throw new InvalidOperationException("Connection string 'PrintOrderContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -37,6 +38,8 @@ app.MapControllerRoute(name: "addbooks",
     pattern: "{controller=Books}/{action=index}/{id?}");
 app.MapControllerRoute(name: "editbooks",
     pattern: "{controller=Books}/{action=editbooks}/{id?}");
+app.MapControllerRoute(name: "Users",
+    pattern: "{controller=Users}/{action=index}/{id?}");
 
 app.Run();
 

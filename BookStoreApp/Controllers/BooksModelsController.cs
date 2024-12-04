@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PrintOrder.Data;
-using PrintOrder.Models;
+using BookStoreApp.Data;
+using BookStoreApp.Models;
 
-namespace PrintOrder.Controllers
+namespace BookStoreApp.Controllers
 {
     public class BooksModelsController : Controller
     {
-        private readonly PrintOrderContext _context;
+        private readonly BookStoreAppContext _context;
 
-        public BooksModelsController(PrintOrderContext context)
+        public BooksModelsController(BookStoreAppContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace PrintOrder.Controllers
         {
               return _context.Books != null ? 
                           View(await _context.Books.ToListAsync()) :
-                          Problem("Entity set 'PrintOrderContext.BooksModel'  is null.");
+                          Problem("Entity set 'BookStoreAppContext.BooksModel'  is null.");
         }
 
         // GET: BooksModels/Details/5
@@ -145,7 +145,7 @@ namespace PrintOrder.Controllers
         {
             if (_context.Books == null)
             {
-                return Problem("Entity set 'PrintOrderContext.BooksModel'  is null.");
+                return Problem("Entity set 'BookStoreAppContext.BooksModel'  is null.");
             }
             var booksModel = await _context.Books.FindAsync(id);
             if (booksModel != null)

@@ -21,28 +21,28 @@
                             <form id="createBook">
                                 <div class="form-group">
                                     <label>Title</label>
-                                    <input class="form-control" placeholder="Enter book title" name="title" value="titles">
+                                    <input class="form-control" placeholder="Enter book title" name="title">
                                     @* <p class="help-block">Example block-level help text here.</p> *@
                                 </div>
 
                                 <div class="form-group">
                                     <label>Author</label>
-                                    <input class="form-control" placeholder="Enter author name" name="authorName" value="authrs">
+                                    <input class="form-control" placeholder="Enter author name" name="authorName">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Genre</label>
-                                    <input class="form-control" placeholder="Enter genre" name="genre" value="genre">
+                                    <input class="form-control" placeholder="Enter genre" name="genre">
                                 </div>
 
                                 <div class="form-group">
                                     <label>ISBN</label>
-                                    <input class="form-control" placeholder="Enter ISBN" name="isbn" value="ISDBBNN">
+                                    <input class="form-control" placeholder="Enter ISBN" name="isbn">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Available copies</label>
-                                    <input type="number" min="0" class="form-control" name="availableCopies" placeholder="Enter the number of available copies" value="14">
+                                    <input type="number" min="0" class="form-control" name="availableCopies" placeholder="Enter the number of available copies">
                                 </div>
 
                                 @* <button type="submit" class="btn btn-primary">Submit</button> *@
@@ -79,7 +79,8 @@
             success: function (result) {
                 console.log(result);
                 $("#errorMsgDiv").hide();
-                window.location.href = '/books';
+                swal.fire("Success!", "New book has been added.", "success");
+                //setTimeout(window.location.href = '/books', 20000);
             },
             error: function (err) {
                 $("#errorMsgDiv").show();

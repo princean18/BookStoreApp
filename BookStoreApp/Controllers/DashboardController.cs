@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PrintOrder.Controllers
+namespace BookStoreApp.Controllers
 {
     public class DashboardController : Controller
     {

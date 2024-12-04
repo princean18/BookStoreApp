@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PrintOrder.Models
+namespace BookStoreApp.Models
 {
     public class Books
     {

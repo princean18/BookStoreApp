@@ -35,6 +35,10 @@
 
     <script src="~/js/jquery.min.js"></script>
 
+    <!-- Sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script>
         async function dataService(url) {
             try {
@@ -54,6 +58,8 @@
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <![endif]-->
 </head>
 <body>
@@ -181,22 +187,22 @@
                         <li>
                             <a href="#"><i class="fa fa-user fa-fw"></i> Users<span class="fa arrow "></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
+                                @* <li>
                                     <a href="index.html" class="active"><i class="fa fa-user-plus fa-fw"></i> Register user</a>
-                                </li>
+                                </li> *@
                                 <li>
-                                    <a href="index.html" class="active"><i class="fa fa-users fa-fw"></i> View users</a>
+                                    <a href="/users" class="active"><i class="fa fa-users fa-fw"></i> View users</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-archive fa-fw"></i> Lending <span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-archive fa-fw"></i> Borrowing <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="index.html" class="active"><i class="fa fa-user-plus fa-fw"></i> Issue books</a>
+                                    <a href="/borrowing" class="active"><i class="fa fa-user-plus fa-fw"></i> Issue books</a>
                                 </li>
                                 <li>
-                                    <a href="index.html" class="active"><i class="fa fa-history fa-fw"></i> View history</a>
+                                    <a href="/borrowing" class="active"><i class="fa fa-history fa-fw"></i> View history</a>
                                 </li>
                             </ul>
                         </li>
@@ -249,14 +255,14 @@
     <!-- DataTables JavaScript -->
     <script src="~/js/dataTables/jquery.dataTables.min.js"></script>
     <script src="~/js/dataTables/dataTables.bootstrap.min.js"></script>
-
+    
 
     <script>
-        // $(document).ready(function() {
-        //     $('#dataTables-example').DataTable({
-        //             responsive: true
-        //     });
-        // });
+         $('.tooltip-demo').tooltip({
+                selector: "[data-toggle=tooltip]",
+                container: "body"
+            })
+
     </script>
 
 
