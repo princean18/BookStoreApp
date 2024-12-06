@@ -23,10 +23,10 @@
                                     <th width="20%">Username</th>
                                     <th>Book Name</th>
                                     <th>Borrow Date</th>
-                                    <th>Due Date</th>
+                                    <th width="20%">Due Date</th>
                                     <th>Return Date</th>
                                     <th>Late Fee</th>
-                                    <th width="20%">Actions</th>
+                                    <th width="20%" data-orderable="false">Actions</th>
                                 </tr>
                             </thead>
                         </table>
@@ -38,131 +38,205 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-top:200px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><b>Manage Borrowing</b></h4>
+            </div>
+            <div class="modal-body">
+                <p id="userName"></p>
+                <p id="bookName"></p>
+                <p id="borrowDate"></p>
+                <p id="dueDate"></p>
+                <p id="lateFee"></p>
+                <div class="checkbox">
+                    <label>
+                        <input id="feeConfirm" type="checkbox" value=""><b>Fee received</b>
+                    </label>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    @* <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> *@
+                    <button type="button" id="returnBtn" value="" onclick="onClickReturn()" class="btn btn-success">Return Book</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
-<script type="text/javascript">
 
-    function onClickDeleteConfirm(val) {
-        // //event.preventDefault(); // prevent form submit
-        // //var form = event.target.form; // storing the form
-        // swal.fire({
-        //     title: "Are you sure?",
-        //     text: "Data will be deleted.",
-        //     showCancelButton: true,
-        //     confirmButtonColor: "#D22B2B",
-        //     confirmButtonText: "Yes, delete it!",
-        //     cancelButtonText: "No, cancel please!",
-        // }).then((result) => {
-        //     if (result.value) {
-        //         onClickDelete(val);
-        //     }
-        // });
-    }
+    <script type="text/javascript">
 
-    function onClickDelete(val) {
+         $(document).ready(function() {
 
-        // $.ajax({
-        //     url: "/books/deletebook",
-        //     type: "POST",
-        //     dataType: "json",
-        //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        //     data:  "id="+val,
-        //     success: function (result) {
-        //         console.log(result);
-        //         swal.fire("Deleted!", "Data has been deleted.", "success");
-        //         $('#dataTableBooks').DataTable().ajax.reload();
-        //     },
-        //     error: function (err) {
-        //         console.log(err);
-        //     }
-        // });
-    }
-
-     $(document).ready(function() {
-
-        $('#dataTableBorrowing').dataTable( {
-            dataType: 'json',
-            ajax: {
-                url: '/borrowing/borrowingdetails',
+            var table = $('#dataTableBorrowing').DataTable( {
                 dataType: 'json',
-                contentType: "application/json",
-                dataSrc: function(res) {
-                    console.log(res);
-                    return res;
+                ajax: {
+                    url: '/borrowing/borrowingdetails',
+                    dataType: 'json',
+                    contentType: "application/json",
+                    dataSrc: function(res) {
+                        console.log(res);
+                        return res;
+                    }
+                },
+                columns: [
+                    { data: "userName" },
+                    { data: "bookName" },
+                    { data: "borrowDate", className: "text-right" },
+                    { data: "dueDate", className: "text-right" },
+                    { data: "returnDate", className: "text-right" },
+                    { data: "lateFee", className: "text-right" },
+                    { title: "Action" }
+                ],
+                columnDefs: [
+                    {
+                        title: 'Member',
+                        "targets": 0
+                    },
+                    {
+                        title: 'Book Name',
+                        "targets": 1
+                    },
+                    {
+                        title: 'Borrowed On',
+                        render: function ( data, type, row ) {
+                            return formatDate(row.borrowDate);
+                        },
+                        "targets": 2
+                    },
+                    {
+                        title: 'Due On',
+                        render: function ( data, type, row ) {
+                            if(row.dueDateAlert=="Y"){
+                                    return '<span class="label label-danger" style="font-size:12px;">DUE: '+ formatDate(row.dueDate) +'</span>';
+                            }else{
+                                return formatDate(row.dueDate);
+                            }
+                        },
+                        "targets": 3
+                    },
+                    {
+                        title: 'Return Date',
+                        render: function ( data, type, row ) {
+                            if(row.returnDate==null){
+                                return "Not Returned"
+                            }
+                            return formatDate(row.returnDate);
+                        },
+                        "targets": 4
+                    },
+                    {
+                        title: 'Late Fee',
+                        "targets": 5
+                    },
+                    {
+                        title: 'Action',
+                        render: function ( data, type, row ) {
+                            return '<button id="calcLateFeeBtn" class="btn btn-sm btn-info"><i class="fa fa-refresh fa-fw"></i> Calculate fee </button> <button id="manageBtn" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Manage </button> <button id="deleteBtn" onclick="onClickDeleteConfirm('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i> Delete </button>';
+                        },
+                        "targets": 6
+                    },
+                ],
+                createdRow: function( row, data, dataIndex){
+                    if( data.dueDateAlert == `Y`){
+                        $(row).addClass('danger');
+                    }row
+                    if( data.returnDate!=null){
+                        $(row).find('#calcLateFeeBtn').addClass('disabled');
+                        $(row).find('#manageBtn').addClass('disabled');
+                        $(row).find('#deleteBtn').addClass('disabled');
+                        $(row).addClass('success');
+                    }
                 }
-            },
-            columns: [
-                { data: "userName" },
-                { data: "bookName" },
-                { data: "borrowDate", className: "text-right" },
-                { data: "dueDate", className: "text-right" },
-                { data: "returnDate", className: "text-right" },
-                { data: "lateFee", className: "text-right" },
-                { title: "Action" }
-            ],
-             "columnDefs": [
-                {
-                    title: 'User',
-                    "targets": 0
-                },
-                {
-                    title: 'Book Name',
-                    "targets": 1
-                },
-                {
-                    title: 'Borrowed Date',
-                    "render": function ( data, type, row ) {
-                        return formatDate(row.borrowDate);
+            });
+
+            table.on('click', '#calcLateFeeBtn', function (e) {
+                $(this).html("<i class='fa fa-refresh fa-spin fa-fw'> </i> Calculate fee");
+                let data = table.row(e.target.closest('tr')).data();
+                //console.log(data);
+                $.ajax({
+                    url: "/borrowing/calculatelatefee",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data:  "id="+data.id,
+                    success: function (result) {
+                        //console.log(result);
+                        setTimeout(function() {
+                            $('#dataTableBorrowing').DataTable().ajax.reload();
+                        }, 1000);
+
                     },
-                    "targets": 2
-                },
-                {
-                    title: 'Due Date',
-                    "render": function ( data, type, row ) {
-                        return formatDate(row.dueDate);
-                    },
-                    "targets": 3
-                },
-                {
-                    title: 'Return Date',
-                    "render": function ( data, type, row ) {
-                        return formatDate(row.returnDate);
-                    },
-                    "targets": 4
-                },
-                {
-                    title: 'Late Fee',
-                    "targets": 5
-                },
-                {
-                    title: 'Action',
-                    "render": function ( data, type, row ) {
-                        return '<button id="approveBtn" class="btn btn-sm btn-info"><i class="fa fa-calculator fa-fw"></i> Calculate Late Fee </button> <button id="editBtn" onclick="onClickEdit('+row.id+')" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Edit </button> <button onclick="onClickDeleteConfirm('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i> Delete </button>';
-                    },
-                    "targets": 6
-                },
-             ]
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
+            table.on('click', '#manageBtn', function (e) {
+                let data = table.row(e.target.closest('tr')).data();
+                $('#myModal').modal('show');
+                $('#feeConfirm').prop('checked',false);
+
+                $('#returnBtn').addClass('disabled');
+                $('#returnBtn').val(data.id);
+                $('#username').text("Member: "+data.userName);
+                $('#bookName').text("Book Name: "+data.bookName);
+                $('#borrowDate').text("Borrowed On: "+formatDate(data.borrowDate));
+                $('#dueDate').text("Due On: "+formatDate(data.dueDate));
+                $('#lateFee').text("Late Fee: "+data.lateFee);
+                //console.log(data);
+            });
+
+         });
+
+        $('#feeConfirm').change(function(){
+            if(this.checked) {
+                $('#returnBtn').removeClass('disabled');
+            }else{
+                $('#returnBtn').addClass('disabled');
+            }
         });
-     });
 
+        function onClickReturn() {
+            let returnId = $('#returnBtn').val();
+            $.ajax({
+                url: "/borrowing/returnbook",
+                type: "POST",
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data:  "id="+returnId,
+                success: function (result) {
+                    $('#myModal').modal('hide');
+                    swal.fire("Success!", "Book has been returned.", "success");
+                    $('#dataTableBorrowing').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
 
-    function onClickEdit(id) {
-        //window.location.href = "/books/editbooks/"+id;
-    }
+        function formatDate(date) {
+            if(date==null){
+                return "";
+            }
+            var d = new Date(date);
 
-    function formatDate(date) {
-        var d = new Date(date);
+            var curr_day = d.getDate();
+            var curr_month = d.getMonth();
+            var curr_year = d.getFullYear();
 
-        var curr_day = d.getDate();
-        var curr_month = d.getMonth();
-        var curr_year = d.getFullYear();
+            curr_month++ ; // In js, first month is 0, not 1
 
-        curr_month++ ; // In js, first month is 0, not 1
+            var formattedDate = curr_day + "/" + curr_month + "/" + curr_year
+            return formattedDate;
+        }
 
-        var formattedDate = curr_day + "/" + curr_month + "/" + curr_year
-        return formattedDate;
-    }
-
-
-
-
-</script>
+    </script>

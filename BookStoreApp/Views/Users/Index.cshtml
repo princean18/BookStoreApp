@@ -104,7 +104,7 @@
                 },
                 {
                     title: 'Role',
-                    "render": function ( data, type, row ) {
+                    render: function ( data, type, row ) {
                         if(row.role=='A'){
                             return "Admin";
                         }else if(row.role=='L'){
@@ -117,7 +117,7 @@
                 },
                 {
                     title: 'Action', 
-                    "render": function ( data, type, row ) {
+                    render: function ( data, type, row ) {
                         return '<button id="approveBtn" class="btn btn-sm btn-success"><i class="fa fa-check fa-fw"></i> Approve </button> <button id="editBtn" onclick="onClickEdit('+row.id+')" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Edit </button> <button onclick="onClickDeleteConfirm('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i> Delete </button>';
                     },
                     "targets": 3

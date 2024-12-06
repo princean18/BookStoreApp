@@ -40,8 +40,6 @@
 <script>
 
     function onClickDeleteConfirm(val) {
-        //event.preventDefault(); // prevent form submit
-        //var form = event.target.form; // storing the form
         swal.fire({
             title: "Are you sure?",
             text: "Data will be deleted.",
@@ -120,7 +118,7 @@
                 },
                 {
                     title: 'Action',
-                    "render": function ( data, type, row ) {
+                    render: function ( data, type, row ) {
                         return '<button id="editBtn" onclick="onClickEdit('+row.id+')" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Edit </button> <button onclick="onClickDeleteConfirm('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i> Delete </button>';
                     },
                     "targets": 5
@@ -133,8 +131,6 @@
     function onClickEdit(id) {
         window.location.href = "/books/editbooks/"+id;
     }
-
-    
 
 
 </script>
