@@ -25,12 +25,13 @@ namespace BookStoreApp.Controllers
         {
             //var usersModel = await _context.Users.ToListAsync();
             var usersModel = from u in _context.Users
-                                   select new
-                                   {
-                                       Username = u.Username,
-                                       Email = u.Email,
-                                       Role = u.Role
-                                   };
+                             where u.Role != "A"
+                             select new
+                                {
+                                    Username = u.Username,
+                                    Email = u.Email,
+                                    Role = u.Role
+                                };
 
             if (usersModel == null)
             {

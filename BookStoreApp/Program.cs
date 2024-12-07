@@ -40,6 +40,8 @@ app.MapControllerRoute(name: "editbooks",
     pattern: "{controller=Books}/{action=editbooks}/{id?}");
 app.MapControllerRoute(name: "Users",
     pattern: "{controller=Users}/{action=index}/{id?}");
+app.MapControllerRoute(name: "GenerateReport",
+    pattern: "{controller=Reports}/{action=GenerateReport}/{type?}");
 
 app.Run();
 
