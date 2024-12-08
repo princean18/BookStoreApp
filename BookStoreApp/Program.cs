@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BookStoreApp.Data;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BookStoreAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreAppContext") ?? throw new InvalidOperationException("Connection string 'PrintOrderContext' not found.")));
+builder.Services.BuildServiceProvider().GetService<BookStoreAppContext>().Database.Migrate();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -42,6 +44,8 @@ app.MapControllerRoute(name: "Users",
     pattern: "{controller=Users}/{action=index}/{id?}");
 app.MapControllerRoute(name: "GenerateReport",
     pattern: "{controller=Reports}/{action=GenerateReport}/{type?}");
+
+
 
 app.Run();
 
