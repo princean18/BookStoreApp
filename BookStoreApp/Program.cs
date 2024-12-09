@@ -1,8 +1,9 @@
 ﻿using BookStoreApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using BookStoreApp.Data;
+using BookStoreApp.Models;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BookStoreAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreAppContext") ?? throw new InvalidOperationException("Connection string 'PrintOrderContext' not found.")));
@@ -11,7 +12,21 @@ builder.Services.BuildServiceProvider().GetService<BookStoreAppContext>().Databa
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddHttpContextAccessor();
+
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".BookStoreApp.Session";
+    options.IdleTimeout = TimeSpan.FromSeconds(300);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -28,9 +43,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.MapControllerRoute(name: "Dashboard",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
@@ -44,8 +60,8 @@ app.MapControllerRoute(name: "Users",
     pattern: "{controller=Users}/{action=index}/{id?}");
 app.MapControllerRoute(name: "GenerateReport",
     pattern: "{controller=Reports}/{action=GenerateReport}/{type?}");
-
-
+app.MapControllerRoute(name: "Login",
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
 
