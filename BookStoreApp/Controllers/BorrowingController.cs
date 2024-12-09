@@ -18,6 +18,11 @@ namespace BookStoreApp.Controllers
             return View();
         }
 
+        public IActionResult IssueBooks()
+        {
+            return View();
+        }
+
         [HttpGet]
         public async Task<ActionResult> BorrowingDetails()
         {
@@ -123,6 +128,76 @@ namespace BookStoreApp.Controllers
             }
             return Json(borrowingModel);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetMemberName(string q)
+        {
+
+            var usersModel = from u in _context.Users
+                             where u.Username.Contains(q) && u.Role != "A"
+                             select new
+                             {
+                                 Id = u.Id,
+                                 Username = u.Username,
+                                 EmailId = u.Email
+                             };
+
+            if (usersModel == null)
+            {
+                return NotFound();
+            }
+
+            return Json(usersModel);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetBookTitle(string q)
+        {
+
+            var usersModel = from b in _context.Books
+                             where b.Title.Contains(q)
+                             select new
+                             {
+                                 Id = b.Id,
+                                 BookTitle = b.Title,
+                                 ISBN = b.ISBN,
+                             };
+
+            if (usersModel == null)
+            {
+                return NotFound();
+            }
+
+            return Json(usersModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Books>>> IssueNewBook(Borrowing book)
+        {
+            var booksModel = await _context.Borrowing.FirstOrDefaultAsync(
+                                            m => m.UserId == book.UserId && 
+                                            m.BookId == book.BookId &&
+                                            m.ReturnDate == null);
+            book.LateFee = "£0";
+
+            //var errors = ModelState
+            //    .Where(x => x.Value.Errors.Count > 0)
+            //    .Select(x => new { x.Key, x.Value.Errors })
+            //    .ToArray();
+            if (booksModel != null)
+            {
+                return Problem("Book already issued.<br> Duplicate entries are not allowed.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+            }
+            return Json(book);
+        }
+
 
         private bool BorrowingModelExists(int id)
         {

@@ -73,7 +73,6 @@ namespace BookStoreApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LateFee")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReturnDate")
@@ -113,7 +112,17 @@ namespace BookStoreApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@lms.com",
+                            PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+                            Role = "A",
+                            Username = "Admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

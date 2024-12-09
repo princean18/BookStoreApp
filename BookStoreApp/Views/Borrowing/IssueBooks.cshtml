@@ -1,0 +1,233 @@
+﻿@{
+    ViewData["Title"] = "Issue Books";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    Enter details of book
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            @* <form method="post" asp-controller="books" asp-action="create"> *@
+                            <form id="issueBook">
+                                <div class="form-group">
+                                    <label>Search member</label>
+                                    <input class="form-control" id="memberName" placeholder="Search member">
+                                    <input type="hidden" class="form-control" id="memberId" placeholder="Hidden member id" name="userId">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Book title</label>
+                                    <input class="form-control" id="bookName" placeholder="Search book title" name="bookTitle">
+                                    <input type="hidden" class="form-control" id="bookId" placeholder="Hidden member id" name="bookId">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Borrow date</label>
+                                    <input type="date" class="form-control" id="borrowDate" name="borrowDate" onchange="onChangeBorrowDate()">
+                                </div>
+
+                                <div class="form-group">
+                                    
+                                    <input  type="hidden" id="dueDate" class="form-control" name="dueDate">
+                                </div>
+                                <a onclick="submitForm()" class="btn btn-primary">Submit</a>
+                                <br />
+                                <br />
+                                <div id="errorMsgDiv" class="alert alert-danger alert-dismissible">
+                                    @* <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> *@
+                                    <p id="errorMsg"></p>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
+
+<script type="text/javascript">
+    $("#errorMsgDiv").hide();
+
+    $('#memberName').autocomplete({
+        minChars: 3,
+        deferRequestBy: 250,
+        serviceUrl: '/borrowing/getMemberName',
+        paramName: 'q',
+        ajaxSettings: {
+            dataType: 'json'
+        },
+        formatResult: function (suggestion, currentValue) {
+             var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.username, currentValue) + "</div>" +
+             "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.emailId, currentValue) + "</div>"
+             return format;
+        },
+        transformResult: function (response) {
+            var suggestions = $.map(response, function (dataItem) {
+                return {
+                    value: dataItem.username,
+                    data: dataItem
+                };
+            })
+            return {
+                suggestions: suggestions
+            };
+        },
+        onSelect: function (suggestion) {
+            document.getElementById('memberId').value = suggestion.data.id;
+        }
+    });
+
+    $('#bookName').autocomplete({
+        minChars: 3,
+        deferRequestBy: 250,
+        serviceUrl: '/borrowing/getBookTitle',
+        paramName: 'q',
+        ajaxSettings: {
+            dataType: 'json'
+        },
+        formatResult: function (suggestion, currentValue) {
+             var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.bookTitle, currentValue) + "</div>" +
+             "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.isbn, currentValue) + "</div>"
+             return format;
+        },
+        transformResult: function (response) {
+            var suggestions = $.map(response, function (dataItem) {
+                return {
+                    value: dataItem.bookTitle,
+                    data: dataItem
+                };
+            })
+            return {
+                suggestions: suggestions
+            };
+        },
+        onSelect: function (suggestion) {
+            document.getElementById('bookId').value = suggestion.data.id;
+        }
+    });
+
+    function highlight(text, focus) {
+        var r = RegExp('(' + escapeRegExp(focus) + ')', 'gi');
+        return text.replace(r, '<strong>$1</strong>');
+    }
+
+    function escapeRegExp(str) {
+        return str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+    }
+
+    //set default date in borrow and due
+    var now = new Date();
+    $('#borrowDate').val(now.toISOString().split("T")[0]);
+    $('#dueDate').val(new Date(now.setDate(now.getDate() + 30 )).toISOString().split("T")[0]);
+    document.getElementById("borrowDate").min = new Date().toISOString().split("T")[0];
+
+    function onChangeBorrowDate(){
+        var borrowDate = new Date($('#borrowDate').val());
+        var addDays = 30;
+        var dueDate = borrowDate;
+
+        var dueDate = new Date(dueDate.setDate(dueDate.getDate() + addDays));
+
+        $('#dueDate').val(dueDate.toISOString().split("T")[0]);
+    }
+
+    function submitForm() {
+        $.ajax({
+            url: "/borrowing/issueNewBook",
+            type: "POST",
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data:  $('#issueBook').serialize(),
+            success: function (result) {
+                console.log(result);
+                if(result.id!=0){
+                    swal.fire("Success!", "Book has been issued.", "success");
+                }else{
+                    $("#errorMsgDiv").show();
+                    $("#errorMsg").html("Book not issued. Try again");
+                }
+                
+                //setTimeout(window.location.href = '/borrowing', 20000);
+            },
+            error: function (err) {
+                $("#errorMsgDiv").show();
+                $("#errorMsg").html( err.responseJSON.detail);
+            }
+        });
+    }
+
+</script>
+
+    <style>
+    .autocomplete-suggestions {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .autocomplete-suggestion {
+        font-size: 14px;
+        padding: 7px;
+        background-color: #f5f5f5;
+        border-top: 1px solid #000;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
+
+    .autocomplete-suggestion-name {
+        line-height: 20px;
+    }
+
+    .autocomplete-suggestion-address {
+        font-size: 12px;
+        line-height: 12px;
+        color: #666;
+    }
+
+
+    .autocomplete-suggestion:first-child {
+        border: none;
+    }
+
+    .autocomplete-suggestion:hover {
+        background-color: #d5f1f3;
+        border-color: #d5f1f3;
+    }
+
+    .autocomplete-selected,
+    .autocomplete-selected:hover {
+        background-color: #b2e3e7;
+        border-color: #b2e3e7;
+    }
+
+    .locationiq-autocomplete-message {
+        font-size: 13px;
+        padding: 7px;
+        background-color: white;
+        overflow-x: auto;
+    }
+    </style>

@@ -8,7 +8,6 @@ namespace BookStoreApp.Controllers
     public class ReportsController : Controller
     {
         private readonly BookStoreAppContext _context;
-
         public ReportsController(BookStoreAppContext context)
         {
             _context = context;

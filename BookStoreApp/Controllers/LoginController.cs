@@ -20,6 +20,8 @@ namespace BookStoreApp.Controllers
             return View(viewModel);
         }
 
+        
+
         [HttpPost]
         public IActionResult Login(LoginModel loginModel)
         {
@@ -35,7 +37,6 @@ namespace BookStoreApp.Controllers
                 // Get the hashed string.  
                 passwordHash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
                 // Print the string.   
-
             }
 
             var obj = _context.Users.Where(a => a.Email.Equals(loginModel.EmailId) && a.PasswordHash.Equals(passwordHash)).FirstOrDefault();
@@ -45,8 +46,14 @@ namespace BookStoreApp.Controllers
                 HttpContext.Session.SetString("userName", obj.Username);
                 return RedirectToAction("Index", "Dashboard");
             }
+            else
+            {
+                ViewData["LoginError"] = "Invalid login details. Try again.";
+                return View("Index", loginModel);
 
-            return View(loginModel);
+            }
+
+            
         }
 
     }

@@ -21,7 +21,6 @@ namespace BookStoreApp.Helper
                 {
                     var session = context.HttpContext.Session.GetString("emailId");
 
-
                     if (session != null)
                     {
                         //List<Menu> menuList = new List<Menu>();

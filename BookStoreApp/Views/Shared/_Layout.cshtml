@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    
     <title>@ViewData["Title"]</title>
 
     <!-- Bootstrap Core CSS -->
@@ -98,9 +98,9 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <ul class="nav navbar-nav navbar-left navbar-top-links">
+            @* <ul class="nav navbar-nav navbar-left navbar-top-links">
                 <li><a href="/dashboard"><i class="fa fa-home fa-fw"></i> Website</a></li>
-            </ul>
+            </ul> *@
 
             <ul class="nav navbar-right navbar-top-links">
                 @* <li class="dropdown navbar-inverse">
@@ -172,7 +172,7 @@
                             </li>
                             <li class="divider"></li> *@
                             <li>
-                                <a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                <a href="/Dashboard/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
                         </ul>
                     </li>
@@ -212,7 +212,7 @@
                             <a href="#"><i class="fa fa-archive fa-fw"></i> Borrowing <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/borrowing" class="active"><i class="fa fa-user-plus fa-fw"></i> Issue books</a>
+                                    <a href="/borrowing/issuebooks" class="active"><i class="fa fa-user-plus fa-fw"></i> Issue books</a>
                                 </li>
                                 <li>
                                     <a href="/borrowing" class="active"><i class="fa fa-history fa-fw"></i> View history</a>
@@ -222,22 +222,22 @@
                         <li>
                             <a href="#"><i class="fa fa-user fa-fw"></i> Users<span class="fa arrow "></span></a>
                             <ul class="nav nav-second-level">
-                                @* <li>
-                                    <a href="index.html" class="active"><i class="fa fa-user-plus fa-fw"></i> Register user</a>
-                                </li> *@
+                                <li>
+                                    <a href="/users/adduser" class="active"><i class="fa fa-user-plus fa-fw"></i> Add member</a>
+                                </li>
                                 <li>
                                     <a href="/users" class="active"><i class="fa fa-users fa-fw"></i> View users</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        @* <li>
                             <a href="#"><i class="fa fa-bell fa-fw"></i> Notifications <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="index.html" class="active"><i class="fa fa-envelope fa-fw"></i> Notify users</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> *@
                         <li>
                             <a href="#"><i class="fa fa-clipboard fa-fw"></i> Reports <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">

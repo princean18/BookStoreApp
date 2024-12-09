@@ -26,7 +26,7 @@
                                     <th width="20%">Due Date</th>
                                     <th>Return Date</th>
                                     <th>Late Fee</th>
-                                    <th width="20%" data-orderable="false">Actions</th>
+                                    <th width="15%" data-orderable="false">Actions</th>
                                 </tr>
                             </thead>
                         </table>
@@ -138,7 +138,7 @@
                     {
                         title: 'Action',
                         render: function ( data, type, row ) {
-                            return '<button id="calcLateFeeBtn" class="btn btn-sm btn-info"><i class="fa fa-refresh fa-fw"></i> Calculate fee </button> <button id="manageBtn" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Manage </button> <button id="deleteBtn" onclick="onClickDeleteConfirm('+row.id+')" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i> Delete </button>';
+                            return '<button id="calcLateFeeBtn" class="btn btn-sm btn-info"><i class="fa fa-refresh fa-fw"></i> Calculate fee </button> <button id="manageBtn" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Manage </button>';
                         },
                         "targets": 6
                     },
