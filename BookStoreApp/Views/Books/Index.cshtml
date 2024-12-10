@@ -69,6 +69,7 @@
             },
             error: function (err) {
                 console.log(err);
+                swal.fire("Oops!", err.responseJSON.detail, "error");
             }
         });
     }

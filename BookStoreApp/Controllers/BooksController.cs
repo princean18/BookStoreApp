@@ -112,6 +112,12 @@ namespace BookStoreApp.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Books>>> DeleteBook(int id)
         {
+            var borrowingModel = await _context.Borrowing.FirstOrDefaultAsync(m => m.BookId == id);
+            if (borrowingModel!=null)
+            {
+                return Problem("Cannot delete book. Already issued to member.");
+            }
+
             if (_context.Books == null)
             {
                 return Problem("Entity set 'BookStoreAppContext.BooksModel'  is null.");
