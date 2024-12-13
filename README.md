@@ -24,7 +24,7 @@ Functional Requirements
     o Notify administrators when books are returned late.
 5.  Reports
     o Generate reports on book inventory, borrowing trends, and overdue items.
- 1. 
+
 ________________________________________
 **Technology Stack**:
 Frontend Framework: Razor Pages / Blazor
