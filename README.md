@@ -26,7 +26,7 @@ Requirements <br>
     o Generate reports on book inventory, borrowing trends, and overdue items.<br>
 
 ________________________________________
-**Technology Stack**:
+**Technology Stack**: <br>
 Frontend Framework: Razor Pages / Blazor <br>
 Backend Framework: ASP.NET Core MVC <br>
 Database: SQL Server <br>
