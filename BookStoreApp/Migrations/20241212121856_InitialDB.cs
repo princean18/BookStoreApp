@@ -19,7 +19,7 @@ namespace BookStoreApp.Migrations
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AvailableCopies = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AvailableCopies = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

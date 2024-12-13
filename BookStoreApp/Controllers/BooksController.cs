@@ -75,8 +75,6 @@ namespace BookStoreApp.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> UpdateBook(int id, [Bind("Id,Title,AuthorName,Genre,ISBN,AvailableCopies")] Books booksModel)
         public async Task<ActionResult<List<Books>>> UpdateBook(int id, Books booksModel)
         {
             

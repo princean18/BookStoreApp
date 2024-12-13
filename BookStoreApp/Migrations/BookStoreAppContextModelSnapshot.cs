@@ -34,9 +34,8 @@ namespace BookStoreApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AvailableCopies")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AvailableCopies")
+                        .HasColumnType("int");
 
                     b.Property<string>("Genre")
                         .IsRequired()

@@ -2,6 +2,7 @@
 using BookStoreApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookStoreApp.Controllers
 {
@@ -161,6 +162,7 @@ namespace BookStoreApp.Controllers
                                  Id = b.Id,
                                  BookTitle = b.Title,
                                  ISBN = b.ISBN,
+                                 AvailableCopies = b.AvailableCopies
                              };
 
             if (usersModel == null)
@@ -174,7 +176,7 @@ namespace BookStoreApp.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Books>>> IssueNewBook(Borrowing book)
         {
-            var booksModel = await _context.Borrowing.FirstOrDefaultAsync(
+            var booksIssueModel = await _context.Borrowing.FirstOrDefaultAsync(
                                             m => m.UserId == book.UserId && 
                                             m.BookId == book.BookId &&
                                             m.ReturnDate == null);
@@ -184,14 +186,18 @@ namespace BookStoreApp.Controllers
             //    .Where(x => x.Value.Errors.Count > 0)
             //    .Select(x => new { x.Key, x.Value.Errors })
             //    .ToArray();
-            if (booksModel != null)
+
+            var booksModel = await _context.Books.FirstOrDefaultAsync(m => m.Id == book.BookId);
+
+            if (booksIssueModel != null)
             {
-                return Problem("Book already issued.<br> Duplicate entries are not allowed.");
+                return Problem("Book already issued for the member.<br> Duplicate entries are not allowed.");
             }
 
             if (ModelState.IsValid)
             {
-                
+                booksModel.AvailableCopies =  booksModel.AvailableCopies-1;
+                _context.Update(booksModel);
                 _context.Add(book);
                 await _context.SaveChangesAsync();
             }

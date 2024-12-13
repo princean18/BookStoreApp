@@ -1,4 +1,4 @@
-﻿namespace BookStoreApp.Data
+﻿namespace BookStoreApp.Models
 {
     public class LoginModel
     {

@@ -41,7 +41,7 @@
                                     
                                     <input  type="hidden" id="dueDate" class="form-control" name="dueDate">
                                 </div>
-                                <a onclick="submitForm()" class="btn btn-primary">Submit</a>
+                                <a id="submitBtn" onclick="submitForm()" class="btn btn-primary">Submit</a>
                                 <br />
                                 <br />
                                 <div id="errorMsgDiv" class="alert alert-danger alert-dismissible">
@@ -63,6 +63,7 @@
 
 <script type="text/javascript">
     $("#errorMsgDiv").hide();
+    $('#submitBtn').addClass('disabled');
 
     $('#memberName').autocomplete({
         minChars: 3,
@@ -73,9 +74,9 @@
             dataType: 'json'
         },
         formatResult: function (suggestion, currentValue) {
-             var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.username, currentValue) + "</div>" +
-             "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.emailId, currentValue) + "</div>"
-             return format;
+            var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.username, currentValue) + "</div>" +
+                        "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.emailId, currentValue) + "</div>"
+            return format;
         },
         transformResult: function (response) {
             var suggestions = $.map(response, function (dataItem) {
@@ -102,9 +103,9 @@
             dataType: 'json'
         },
         formatResult: function (suggestion, currentValue) {
-             var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.bookTitle, currentValue) + "</div>" +
-             "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.isbn, currentValue) + "</div>"
-             return format;
+            var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.bookTitle, currentValue) + "</div>" +
+                        "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.isbn, currentValue) + "</div>"
+            return format;
         },
         transformResult: function (response) {
             var suggestions = $.map(response, function (dataItem) {
@@ -119,6 +120,13 @@
         },
         onSelect: function (suggestion) {
             document.getElementById('bookId').value = suggestion.data.id;
+            if(suggestion.data.availableCopies<=0){
+                $('#submitBtn').addClass('disabled');
+                $("#errorMsgDiv").show();
+                $("#errorMsg").html("Copy not available for the selected book.");
+            }else{
+                $('#submitBtn').removeClass('disabled');
+            }      
         }
     });
 
@@ -174,60 +182,4 @@
 
 </script>
 
-    <style>
-    .autocomplete-suggestions {
-        width: 100%;
-        position: absolute;
-        left: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        display: none;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .autocomplete-suggestion {
-        font-size: 14px;
-        padding: 7px;
-        background-color: #f5f5f5;
-        border-top: 1px solid #000;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: pointer;
-    }
-
-    .autocomplete-suggestion-name {
-        line-height: 20px;
-    }
-
-    .autocomplete-suggestion-address {
-        font-size: 12px;
-        line-height: 12px;
-        color: #666;
-    }
-
-
-    .autocomplete-suggestion:first-child {
-        border: none;
-    }
-
-    .autocomplete-suggestion:hover {
-        background-color: #d5f1f3;
-        border-color: #d5f1f3;
-    }
-
-    .autocomplete-selected,
-    .autocomplete-selected:hover {
-        background-color: #b2e3e7;
-        border-color: #b2e3e7;
-    }
-
-    .locationiq-autocomplete-message {
-        font-size: 13px;
-        padding: 7px;
-        background-color: white;
-        overflow-x: auto;
-    }
-    </style>
+    

@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    
+
     <title>@ViewData["Title"]</title>
 
     <!-- Bootstrap Core CSS -->
@@ -53,8 +53,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital@0;1&family=Quicksand&display=swap" rel="stylesheet">
 
     <style>
-        body{
-        font-family: "Open Sans", sans-serif !important;
+        body {
+            font-family: "Open Sans", sans-serif !important;
         }
     </style>
 
@@ -84,7 +84,7 @@
 </head>
 <body>
     @* @if (HttpContext.Session["UserId"].ToString() != null){ *@
-    
+
     <div id="wrapper">
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="navbar-header">
@@ -159,24 +159,23 @@
                 </li> *@
                 @* @if (signInManager.IsSignedIn(User))
                 { *@
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> @userEmailId <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            @* <li>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        @* <li>
                                 <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                             </li>
                             <li class="divider"></li> *@
-                            <li>
-                                <a href="/Dashboard/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                            </li>
-                        </ul>
-                    </li>
-                //}
+                        <li>
+                            <a href="/Dashboard/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <!-- /.navbar-top-links -->
 
@@ -184,14 +183,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search books...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
+                            <input id="bookNameSearch" type="text" class="form-control" placeholder="Search books...">
                             <!-- /input-group -->
                         </li>
                         <li>
@@ -258,6 +250,50 @@
 
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
+
+    <script>
+        $('#bookNameSearch').autocomplete({
+            minChars: 3,
+            deferRequestBy: 250,
+            serviceUrl: '/borrowing/getBookTitle',
+            paramName: 'q',
+            ajaxSettings: {
+                dataType: 'json'
+            },
+            formatResult: function (suggestion, currentValue) {
+                var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.bookTitle, currentValue) + "</div>" +
+                            "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.isbn, currentValue) + "</div>"
+                return format;
+            },
+            transformResult: function (response) {
+                var suggestions = $.map(response, function (dataItem) {
+                    return {
+                        value: dataItem.bookTitle,
+                        data: dataItem
+                    };
+                })
+                return {
+                    suggestions: suggestions
+                };
+            },
+            onSelect: function (suggestion) {
+                window.location.href = "/dashboard/SearchResult/"+suggestion.data.id;
+            }
+        });
+
+        function highlight(text, focus) {
+            var r = RegExp('(' + escapeRegExp(focus) + ')', 'gi');
+            return text.replace(r, '<strong>$1</strong>');
+        }
+
+        function escapeRegExp(str) {
+            return str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+        }
+
+    </script>
+
 
     <!-- jQuery -->
     <script src="~/js/jquery.min.js"></script>
@@ -279,15 +315,64 @@
     <!-- DataTables JavaScript -->
     <script src="~/js/dataTables/jquery.dataTables.min.js"></script>
     <script src="~/js/dataTables/dataTables.bootstrap.min.js"></script>
-    
 
-    <script>
-         $('.tooltip-demo').tooltip({
-                selector: "[data-toggle=tooltip]",
-                container: "body"
-            })
+    <style>
+        .autocomplete-suggestions {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: none;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
-    </script>
+        .autocomplete-suggestion {
+            font-size: 14px;
+            padding: 7px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+
+        .autocomplete-suggestion-name {
+            line-height: 20px;
+        }
+
+        .autocomplete-suggestion-address {
+            font-size: 12px;
+            line-height: 12px;
+            color: #666;
+        }
+
+
+        .autocomplete-suggestion:first-child {
+            border: none;
+        }
+
+        .autocomplete-suggestion:hover {
+            background-color: #d5f1f3;
+            border-color: #d5f1f3;
+        }
+
+        .autocomplete-selected,
+        .autocomplete-selected:hover {
+            background-color: #b2e3e7;
+            border-color: #b2e3e7;
+        }
+
+        .locationiq-autocomplete-message {
+            font-size: 13px;
+            padding: 7px;
+            background-color: white;
+            overflow-x: auto;
+        }
+    </style>
 
 
 

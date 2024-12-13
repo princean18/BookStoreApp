@@ -1,0 +1,173 @@
+﻿@{
+    ViewData["Title"] = "Search Results";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <i class="fa fa-info-circle fa-fw"></i> Book Details
+                </div>
+
+
+                <div class="panel-body">
+                    <div class="col-12">
+                        <table id="" class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <td align="right">Title</td>
+                                    <td><p id="bookTitle"></p></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Author</td>
+                                    <td><p id="author"></p></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Genre</td>
+                                    <td><p id="genre"></p></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">ISBN</td>
+                                    <td><p id="ISBN"></p></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Available Copies</td>
+                                    <td><p id="copies"></p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-history fa-fw"></i> Book Borrow History
+                </div>
+
+                <div class="panel-body">
+                    <div class="col-12">
+                        <table id="borrowingSearchResult" class="table table-hover"></table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        $.ajax({
+            url: "/dashboard/bookdetails",
+            type: "GET",
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data:  "bookId="+@ViewData["BookId"],
+            success: function (result) {
+                console.log(result);
+                $("#bookTitle").html(result.title);
+                $("#author").html(result.authorName);
+                $("#genre").html(result.genre);
+                $("#ISBN").html(result.isbn);
+                $("#copies").html(result.availableCopies);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+
+        var table = $('#borrowingSearchResult').DataTable( {
+            dataType: 'json',
+            ajax: {
+                url: '/dashboard/borrowingsearchresult?bookID='+@ViewData["BookId"]+'',
+                dataType: 'json',
+                contentType: "application/json",
+                dataSrc: function(res) {
+                    console.log(res);
+                    return res;
+                }
+            },
+            columns: [
+                { data: "userName" },
+                { data: "bookName" },
+                { data: "borrowDate", className: "text-right" },
+                { data: "dueDate", className: "text-right" },
+                { data: "returnDate", className: "text-right" },
+            ],
+            columnDefs: [
+                {
+                    title: 'Member',
+                    "targets": 0
+                },
+                {
+                    title: 'Book Name',
+                    "targets": 1
+                },
+                {
+                    title: 'Borrowed On',
+                    render: function ( data, type, row ) {
+                        return formatDate(row.borrowDate);
+                    },
+                    "targets": 2
+                },
+                {
+                    title: 'Due On',
+                    render: function ( data, type, row ) {
+                        if(row.dueDateAlert=="Y"){
+                                return formatDate(row.dueDate);
+                        }else{
+                            return formatDate(row.dueDate);
+                        }
+                    },
+                    "targets": 3
+                },
+                {
+                    title: 'Return Date',
+                    render: function ( data, type, row ) {
+                        if(row.returnDate==null){
+                            return "Not Returned"
+                        }
+                        return formatDate(row.returnDate);
+                    },
+                    "targets": 4
+                },
+            ],
+            createdRow: function( row, data, dataIndex){
+                // if( data.dueDateAlert == `Y`){
+                //     $(row).addClass('danger');
+                // }
+            },
+        });
+    });
+
+    function formatDate(date) {
+        if(date==null){
+            return "";
+        }
+        var d = new Date(date);
+
+        var curr_day = d.getDate();
+        var curr_month = d.getMonth();
+        var curr_year = d.getFullYear();
+
+        curr_month++ ; // In js, first month is 0, not 1
+
+        var formattedDate = curr_day + "/" + curr_month + "/" + curr_year
+        return formattedDate;
+        }
+
+</script>
