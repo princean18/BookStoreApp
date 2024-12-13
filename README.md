@@ -1,7 +1,10 @@
-**Library Management System – Technical Documentation**
+**Library Management System – Technical Documentation** 
+
 Overview
 The Library Management System (LMS) is a web-based application designed to manage the operations of a library, including cataloging, issuing books, returning books, and maintaining user accounts. The system will be developed using ASP.NET Core framework.
+
 ________________________________________
+
 System Requirements
 Functional Requirements
 1.  User Management
@@ -21,6 +24,7 @@ Functional Requirements
     o Notify administrators when books are returned late.
 5.  Reports
     o Generate reports on book inventory, borrowing trends, and overdue items.
+ 1. 
 ________________________________________
 **Technology Stack**:
 Frontend Framework: Razor Pages / Blazor
