@@ -2,28 +2,28 @@
 Library Management System – Technical Documentation
 
 The Library Management System (LMS) is a web-based application designed to manage the operations of a library, including cataloging, issuing books, returning books, and maintaining user accounts. The system will be developed using ASP.NET Core framework.
-
+<br>
+Link: http://bookstore.tryasp.net/Login
 ________________________________________ 
 
-System Requirements
-Functional Requirements
-1.  User Management
-    o Register new users (Admin, Librarians, and Members).
-    o Authenticate and authorize users based on roles.
-    o View and manage user profiles.
-2.  Book Management
-    o Add, edit, and delete book records.
-    o Search for books by title, author, or category.
-    o Categorize books by genre and author.
-3.  Lending Management
-    o Issue books to members.
-    o Record book returns and calculate late fees.
-    o View member borrowing history.
-4.  Notifications
-    o Notify users of due dates and overdue books.
-    o Notify administrators when books are returned late.
-5.  Reports
-    o Generate reports on book inventory, borrowing trends, and overdue items.
+Requirements <br>
+1.  User Management<br>
+    o Register new users (Admin, Librarians, and Members).<br>
+    o Authenticate and authorize users based on roles.<br>
+    o View and manage user profiles.<br>
+2.  Book Management<br>
+    o Add, edit, and delete book records.<br>
+    o Search for books by title, author, or category.<br>
+    o Categorize books by genre and author.<br>
+3.  Lending Management<br>
+    o Issue books to members.<br>
+    o Record book returns and calculate late fees.<br>
+    o View member borrowing history.<br>
+4.  Notifications<br>
+    o Notify users of due dates and overdue books.<br>
+    o Notify administrators when books are returned late.<br>
+5.  Reports<br>
+    o Generate reports on book inventory, borrowing trends, and overdue items.<br>
 
 ________________________________________
 **Technology Stack**:
