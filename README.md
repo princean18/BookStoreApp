@@ -27,8 +27,8 @@ Functional Requirements
 
 ________________________________________
 **Technology Stack**:
-Frontend Framework: Razor Pages / Blazor
-Backend Framework: ASP.NET Core MVC
-Database: SQL Server
-ORM Entity: Framework Core
-Version Control: Git
+Frontend Framework: Razor Pages / Blazor <br>
+Backend Framework: ASP.NET Core MVC <br>
+Database: SQL Server <br>
+ORM Entity: Framework Core <br>
+Version Control: Git <br>
