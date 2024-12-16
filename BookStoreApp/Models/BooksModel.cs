@@ -14,4 +14,9 @@ namespace BookStoreApp.Models
         public int AvailableCopies { get; set; }
 
     }
+
+    public class BookList
+    {
+        public List<Books> books { get; set; }
+    }
 }
