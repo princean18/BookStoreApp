@@ -103,6 +103,8 @@
             dataType: 'json'
         },
         formatResult: function (suggestion, currentValue) {
+            $("#errorMsgDiv").hide();
+            $("#errorMsg").html("");
             var format = "<div class='autocomplete-suggestion-name'>" + highlight(suggestion.data.bookTitle, currentValue) + "</div>" +
                         "<div class='autocomplete-suggestion-address'>" + highlight(suggestion.data.isbn, currentValue) + "</div>"
             return format;
@@ -119,6 +121,7 @@
             };
         },
         onSelect: function (suggestion) {
+            $("#errorMsg").html("");
             document.getElementById('bookId').value = suggestion.data.id;
             if(suggestion.data.availableCopies<=0){
                 $('#submitBtn').addClass('disabled');
@@ -126,6 +129,8 @@
                 $("#errorMsg").html("Copy not available for the selected book.");
             }else{
                 $('#submitBtn').removeClass('disabled');
+                $("#errorMsgDiv").hide();
+                $("#errorMsg").html("");
             }      
         }
     });

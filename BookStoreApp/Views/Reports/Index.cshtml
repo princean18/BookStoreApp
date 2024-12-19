@@ -28,7 +28,7 @@
                             <p class="help-block">All reports will be downloaded in spreadsheet format.</p>
                         </div>
                         
-                        <button type="button" class="btn btn-danger btn-block" onclick="onClickGenerate()"><i class="fa fa-file-excel-o fa-fw"></i> Generate report</button>
+                        <button id="generateBtn" type="button" class="btn btn-danger btn-block" onclick="onClickGenerate()"><i class="fa fa-file-excel-o fa-fw"></i> Generate report</button>
                         <br />
                     </div>
                     
@@ -43,21 +43,12 @@
 <script type="text/javascript">
 
     function onClickGenerate() {
+        $('#generateBtn').html("<i class='fa fa-refresh fa-spin fa-fw'> </i> Generating report..Please wait");
         var rptType = $("#reportType").val();
         window.location.href = "/reports/generatereport?rptType="+rptType;
-        // $.ajax({
-        //     url: "/reports/generatereport",
-        //     type: "GET",
-        //     dataType: "json",
-        //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        //     data:  "type="+rptType,
-        //     success: function (result) {
-        //         window.open("data:application/pdf;base64," + result, '_blank');
-        //     },
-        //     error: function (err) {
-        //         console.log(err);
-        //     }
-        // });
+        setTimeout(function() {
+            $('#generateBtn').html("<i class='fa fa-file-excel-o fa-fw'></i> Generate report");
+        }, 1500);
     }
 
 </script>
