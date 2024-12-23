@@ -3,7 +3,7 @@ Library Management System – Technical Documentation
 
 The Library Management System (LMS) is a web-based application designed to manage the operations of a library, including cataloging, issuing books, returning books, and maintaining user accounts. The system will be developed using ASP.NET Core framework.
 <br>
-Link: http://bookstore.tryasp.net/Login
+Link: https://bookstore.tryasp.net/Login
 ________________________________________ 
 
 Requirements <br>
@@ -27,7 +27,7 @@ Requirements <br>
 
 ________________________________________
 **Technology Stack**: <br>
-Frontend Framework: Razor Pages / Blazor <br>
+Frontend Framework: Razor Pages / Blazor, JavaScript, jQuery, ajax, Bootstrap, CSS <br>
 Backend Framework: ASP.NET Core MVC <br>
 Database: SQL Server <br>
 ORM Entity: Framework Core <br>
