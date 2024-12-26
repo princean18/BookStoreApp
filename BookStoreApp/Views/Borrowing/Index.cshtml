@@ -20,13 +20,14 @@
                         <table class="table table-striped table-bordered table-hover" id="dataTableBorrowing">
                             <thead>
                                 <tr>
-                                    <th width="20%">Username</th>
-                                    <th>Book Name</th>
-                                    <th>Borrow Date</th>
-                                    <th width="20%">Due Date</th>
-                                    <th>Return Date</th>
-                                    <th>Late Fee</th>
-                                    <th width="15%" data-orderable="false">Actions</th>
+                                    <th width="10%">Username</th>
+                                    <th width="20%">Book Name</th>
+                                    <th width="9%">Borrow Date</th>
+                                    <th width="9%">Due Date</th>
+                                    <th width="10%">Status</th>
+                                    <th width="8%">Return Date</th>
+                                    <th width="5%">Late Fee</th>
+                                    <th width="12%" data-orderable="false">Actions</th>
                                 </tr>
                             </thead>
                         </table>
@@ -91,6 +92,7 @@
                     { data: "borrowDate", className: "text-right" },
                     { data: "dueDate", className: "text-right" },
                     { data: "returnDate", className: "text-right" },
+                    { title: "Status", className: "text-center" },
                     { data: "lateFee", className: "text-right" },
                     { title: "Action" }
                 ],
@@ -132,15 +134,27 @@
                         "targets": 4
                     },
                     {
+                        title: 'Status',
+                        "targets": 5,
+                        render: function ( data, type, row ) {
+                            if(row.returnDate==null){
+                                return '<label class="label label-info">Active</label>'
+                            }
+                            if(row.returnDate!=null){
+                                return '<label class="label label-info">Returned</label>'
+                            }
+                        }
+                    },
+                    {
                         title: 'Late Fee',
-                        "targets": 5
+                        "targets": 6
                     },
                     {
                         title: 'Action',
                         render: function ( data, type, row ) {
                             return '<button id="calcLateFeeBtn" class="btn btn-sm btn-info"><i class="fa fa-refresh fa-fw"></i> Calculate fee </button> <button id="manageBtn" class="btn btn-sm btn-primary"><i class="fa fa-edit fa-fw"></i> Manage </button>';
                         },
-                        "targets": 6
+                        "targets": 7
                     },
                 ],
                 createdRow: function( row, data, dataIndex){
@@ -151,7 +165,7 @@
                         $(row).find('#calcLateFeeBtn').addClass('disabled');
                         $(row).find('#manageBtn').addClass('disabled');
                         $(row).find('#deleteBtn').addClass('disabled');
-                        $(row).addClass('success');
+                        //$(row).addClass('success');
                     }
                 }
             });
