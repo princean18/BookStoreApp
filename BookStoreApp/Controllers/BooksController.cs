@@ -51,7 +51,6 @@ namespace BookStoreApp.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult<List<Books>>> Create(Books books)
         {
             var booksModel = await _context.Books.FirstOrDefaultAsync(m => m.ISBN == books.ISBN);
