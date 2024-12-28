@@ -33,3 +33,19 @@ Backend Framework: ASP.NET Core MVC <br>
 Database: SQL Server <br>
 ORM Entity: Framework Core <br>
 Version Control: Git <br>
+
+![image](https://github.com/user-attachments/assets/c93c02e5-3533-4945-81dc-0b669d47e73e)
+
+![image](https://github.com/user-attachments/assets/93040583-b1a9-499b-a666-404014423fb8)
+
+![image](https://github.com/user-attachments/assets/ba5dfd79-94f6-4bca-903e-df20bdcf0f6d)
+
+![image](https://github.com/user-attachments/assets/878836f0-1048-4b7e-992f-1e09713b1df1)
+
+
+
+
+
+
+
+
