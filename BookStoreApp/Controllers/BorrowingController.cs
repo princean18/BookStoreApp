@@ -106,13 +106,16 @@ namespace BookStoreApp.Controllers
         public async Task<ActionResult<List<Borrowing>>> ReturnBook(int id)
         {
             var borrowingModel = await _context.Borrowing.FirstOrDefaultAsync(m => m.Id == id);
-            
+            var booksModel = await _context.Books.FirstOrDefaultAsync(m => m.Id == borrowingModel.BookId);
+            booksModel.AvailableCopies = booksModel.AvailableCopies + 1;
+
             if (borrowingModel != null)
             {
                 borrowingModel.ReturnDate = DateTime.Now;
                 try
                 {
                     _context.Update(borrowingModel);
+                    _context.Update(booksModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
